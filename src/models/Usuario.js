@@ -1,7 +1,7 @@
 import {Schema, model} from "mongoose";
 import bcrypt from "bcryptjs"
 
-const usuariosSchema = new Schema({
+const usuarioSchema = new Schema({
     nombre:{
         type:String,
         require:true,
@@ -35,23 +35,23 @@ const usuariosSchema = new Schema({
 })
 
 // Metodo para cifrar el password del estudiante
-usuariosSchema.methods.encrypPassword = async function(password){
+usuarioSchema.methods.encrypPassword = async function(password){
     const salt = await bcrypt.genSalt(10)
     const passwordEncryp = await bcrypt.hash(password, salt)
     return passwordEncryp
 }
 
 // Metodo para verificar si el password ingresado es el mismo de la BDD
-usuariosSchema.methods.matchPassword = async function(password){
+usuarioSchema.methods.matchPassword = async function(password){
     const response = await bcrypt.compare(password,this.password)
     return response
 }
 
 // Metodopara crear un token 
-usuariosSchema.methods.crearToken = function(){
+usuarioSchema.methods.crearToken = function(){
     const tokenGenerado = this.token = Math.random().toString(36).slice(2)
     return tokenGenerado
 }
 
 
-export default model('Usuarios', usuariosSchema)
+export default model('Usuario', usuarioSchema)
