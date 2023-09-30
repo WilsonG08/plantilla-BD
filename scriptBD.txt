@@ -1,0 +1,81 @@
+Tabla estudiantes:
+id: int(11)
+nombre: varchar(20)
+apellido: varchar(20)
+cedula: varchar(20)
+fecha_nacimiento: varchar(20)
+ciudad: varchar(20)
+direccion: varchar(10)
+telefono: varchar(20)
+email: varchar(20)
+
+
+Tabla materias:
+id: int(11)
+nombre: varchar(20)
+codigo: varchar(20)
+descripcion: varchar(20)
+creditos: varchar(10)
+
+Tabla usuarios:
+id: int(11)
+nombre: varchar(20)
+apellido: varchar(20)
+email: varchar(30)
+password: varchar(20)
+
+Tabla: matriculas:
+id: int(11)
+codigo: int(11)
+descripccion: varchar(20)
+id_estudiantes: int(11)
+id_materia: int(11)
+
+===============================================
+==============================================
+
+create database EPN;
+
+USE  epn;
+
+-- Crear la tabla estudiantes
+CREATE TABLE estudiantes (
+    id INT(11) PRIMARY KEY,
+    nombre VARCHAR(20),
+    apellido VARCHAR(20),
+    cedula VARCHAR(20),
+    fecha_nacimiento VARCHAR(20),
+    ciudad VARCHAR(20),
+    direccion VARCHAR(100),
+    telefono VARCHAR(20),
+    email VARCHAR(50)
+);
+
+-- Crear la tabla materias
+CREATE TABLE materias (
+    id INT(11) PRIMARY KEY,
+    nombre VARCHAR(20),
+    codigo VARCHAR(20),
+    descripcion VARCHAR(100),
+    creditos INT(11)
+);
+
+-- Crear la tabla usuarios
+CREATE TABLE usuarios (
+    id INT(11) PRIMARY KEY,
+    nombre VARCHAR(20),
+    apellido VARCHAR(20),
+    email VARCHAR(50),
+    password VARCHAR(50)
+);
+
+-- Crear la tabla matriculas
+CREATE TABLE matriculas (
+    id INT(11) PRIMARY KEY,
+    codigo INT(11),
+    descripcion VARCHAR(100),
+    id_estudiante INT(11),
+    id_materia INT(11),
+    FOREIGN KEY (id_estudiante) REFERENCES estudiantes(id),
+    FOREIGN KEY (id_materia) REFERENCES materias(id)
+);

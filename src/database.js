@@ -2,7 +2,6 @@ import mongoose from 'mongoose'
 
 mongoose.set('strictQuery', true)
 
-// funcion para la conexion de la Bd
 const connection = async()=>{
     try {
         const {connection} = await mongoose.connect(process.env.MONGODB_URI,{

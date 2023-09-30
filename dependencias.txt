@@ -2,6 +2,8 @@
 
 Librerias:
 
+npm i express bcryptjs mongoose dotenv nodemailer jsonwebtoken cors
+
 1.- npm i express
 2.- npm i dotenv
 3.- npm i mongoose

@@ -1,5 +1,7 @@
 import Usuarios from '../models/Usuarios.js'
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
+import sendMailToUser from "../config/nodemailer.js"
+
 
 
 // Se crea una funcion asincrona 
@@ -39,3 +41,64 @@ const login = async(req, res) =>{
 }
 
 
+/* const perfil = (req, res)>{
+    delete req.UsuariosBDD.token
+    delete req.UsuariosBDD.confirmEmail
+    delete req.UsuariosBDD.cre
+    res.status(200).json(req.UsuariosBDD)
+} */
+
+const perfil = (req, res)=>{
+    res.status(200).json({res:'perfil del usuario'})
+}
+
+
+const registro = async (req,res)=>{
+    // Extrae las propiedades del email y password del objeto 
+    const {email,password} = req.body
+
+    // Verifica si tiene algun valor vacio, para verificar si ha llenado todos los campos obligatorios
+    if (Object.values(req.body).includes("")) return res.status(400).json({msg:"Lo sentimos, debes llenar todos los campos"})
+
+    // Busca el usuario en BDD
+    const verificarEmailBDD = await Usuarios.findOne({email})
+
+    // Verificia si el correo esta registrado y si esta muestra el msg
+    if(verificarEmailBDD) return res.status(400).json({msg:"Lo sentimos, el email ya se encuentra registrado"})
+
+    // Crea un objeto con los datos enpecificados 
+    const nuevoUsuario = new Usuarios(req.body)
+
+    // Encripta la contraseña proporcionada por el usuario 
+    nuevoUsuario.password = await nuevoUsuario.encrypPassword(password)
+
+    // Crea un token JWT para el nuevo usuario
+    const token = nuevoUsuario.crearToken()
+
+    // Se envia un correo electronico al usuario con el token JWT
+    await sendMailToUser(email,token)
+
+    // Guarda el nuevo usuario en la base de datos
+    await nuevoUsuario.save()
+
+    // Manda al respuesta con el status 200
+    res.status(200).json({res:'Revisa tu correo electronico para confirmar tu cuenta'})
+}
+
+
+
+const confirmEmail = (req,res)=>{
+    res.status(200).json({res:'confirmar email de registro del usuario'})
+}
+
+const actualizarPerfil = (req,res)=>{
+    res.status(200).json({res:'actualizar perfil de un usuario registrado'})
+}
+
+export{
+    login,
+    perfil,
+    registro,
+    confirmEmail,
+    actualizarPerfil,
+}
